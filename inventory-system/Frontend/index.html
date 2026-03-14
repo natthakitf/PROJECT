@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Inventory System</title>
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+
+<div class="container py-5">
+
+<h1 class="title">Inventory Management System</h1>
+
+<!-- LOW STOCK ALERT -->
+
+<div id="warning" class="alert alert-danger" style="display:none"></div>
+
+
+<!-- DASHBOARD -->
+
+<div class="dashboard">
+
+<div class="card blue">
+<h6>Total Products</h6>
+<h2 id="total">0</h2>
+</div>
+
+<div class="card red">
+<h6>Low Stock</h6>
+<h2 id="low">0</h2>
+</div>
+
+</div>
+
+
+<!-- ADD PRODUCT -->
+
+<div class="box">
+
+<h4>Add Product</h4>
+
+<div class="form-row">
+
+<input id="name" placeholder="Product Name">
+<input id="stock" placeholder="Stock">
+<input id="min" placeholder="Min Stock">
+
+<button class="btn-green" onclick="addProduct()">Add</button>
+
+</div>
+
+</div>
+
+
+<!-- STOCK -->
+
+<div class="box">
+
+<h4>Stock IN / OUT</h4>
+
+<div class="form-row">
+
+<input id="pid" placeholder="Product ID">
+<input id="qty" placeholder="Quantity">
+
+<button class="btn-blue" onclick="stockIn()">IN</button>
+<button class="btn-red" onclick="stockOut()">OUT</button>
+
+</div>
+
+</div>
+
+
+<!-- REPORT -->
+
+<div class="box">
+
+<h4>Report</h4>
+
+<button class="btn-blue" onclick="dailyReport()">Daily Report</button>
+<button class="btn-green" onclick="monthlyReport()">Monthly Report</button>
+
+<p id="report"></p>
+
+</div>
+
+
+<!-- PRODUCTS -->
+
+<div class="box">
+
+<h4>Products</h4>
+
+<input id="search" placeholder="Search product..." onkeyup="searchProduct()">
+
+<table>
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Stock</th>
+<th>Min</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="table"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+const API="http://localhost:3000"
+
+
+async function load(){
+
+const res=await fetch(API+"/products")
+const data=await res.json()
+
+let html=""
+
+let warningText=""
+
+data.forEach(p=>{
+
+if(p.stock<=p.min_stock){
+
+warningText+=`⚠ Low Stock: ${p.name}<br>`
+
+}
+
+html+=`
+
+<tr>
+
+<td>${p.id}</td>
+
+<td>${p.name}</td>
+
+<td style="color:${p.stock<=p.min_stock?'red':'black'}">
+${p.stock}
+</td>
+
+<td>${p.min_stock}</td>
+
+<td>
+
+<button class="btn-blue"
+onclick="editProduct(${p.id},'${p.name}',${p.stock},${p.min_stock})">
+Edit
+</button>
+
+<button class="btn-red"
+onclick="deleteProduct(${p.id})">
+Delete
+</button>
+
+</td>
+
+</tr>
+
+`
+
+})
+
+document.getElementById("table").innerHTML=html
+
+document.getElementById("total").innerText=data.length
+
+const low=data.filter(p=>p.stock<=p.min_stock)
+
+document.getElementById("low").innerText=low.length
+
+
+// LOW STOCK WARNING
+
+if(warningText!=""){
+
+document.getElementById("warning").style.display="block"
+document.getElementById("warning").innerHTML=warningText
+
+}else{
+
+document.getElementById("warning").style.display="none"
+
+}
+
+}
+
+
+
+async function addProduct(){
+
+await fetch(API+"/products",{
+
+method:"POST",
+
+headers:{"Content-Type":"application/json"},
+
+body:JSON.stringify({
+
+name:document.getElementById("name").value,
+stock:Number(document.getElementById("stock").value),
+min_stock:Number(document.getElementById("min").value)
+
+})
+
+})
+
+load()
+
+}
+
+
+
+async function stockIn(){
+
+await fetch(API+"/stock/in",{
+
+method:"POST",
+
+headers:{"Content-Type":"application/json"},
+
+body:JSON.stringify({
+
+id:Number(document.getElementById("pid").value),
+quantity:Number(document.getElementById("qty").value)
+
+})
+
+})
+
+load()
+
+}
+
+
+
+async function stockOut(){
+
+await fetch(API+"/stock/out",{
+
+method:"POST",
+
+headers:{"Content-Type":"application/json"},
+
+body:JSON.stringify({
+
+id:Number(document.getElementById("pid").value),
+quantity:Number(document.getElementById("qty").value)
+
+})
+
+})
+
+load()
+
+}
+
+
+
+async function deleteProduct(id){
+
+if(!confirm("Delete this product?")) return
+
+await fetch(API+"/products/"+id,{method:"DELETE"})
+
+load()
+
+}
+
+
+
+async function editProduct(id,name,stock,min){
+
+const newName=prompt("Product Name:",name)
+const newStock=prompt("Stock:",stock)
+const newMin=prompt("Min Stock:",min)
+
+if(newName==null) return
+
+await fetch(API+"/products/"+id,{
+
+method:"PUT",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+name:newName,
+stock:Number(newStock),
+min_stock:Number(newMin)
+
+})
+
+})
+
+load()
+
+}
+
+
+
+function searchProduct(){
+
+let input=document.getElementById("search").value.toLowerCase()
+
+let rows=document.querySelectorAll("#table tr")
+
+rows.forEach(row=>{
+
+let text=row.innerText.toLowerCase()
+
+row.style.display=text.includes(input) ? "" : "none"
+
+})
+
+}
+
+
+
+async function dailyReport(){
+
+const res=await fetch(API+"/products")
+const data=await res.json()
+
+let total=data.reduce((sum,p)=>sum+p.stock,0)
+
+document.getElementById("report").innerText="Daily Total Stock: "+total
+
+}
+
+
+
+async function monthlyReport(){
+
+const res=await fetch(API+"/products")
+const data=await res.json()
+
+let total=data.reduce((sum,p)=>sum+p.stock,0)
+
+document.getElementById("report").innerText="Monthly Total Stock: "+total
+
+}
+
+
+
+load()
+
+</script>
+
+</body>
+</html>
