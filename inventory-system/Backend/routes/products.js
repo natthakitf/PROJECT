@@ -3,8 +3,6 @@ const router=express.Router()
 
 const db=require("../db")
 
-// get products
-
 router.get("/",async(req,res)=>{
 
 const [rows]=await db.query("SELECT * FROM products")
@@ -12,8 +10,6 @@ const [rows]=await db.query("SELECT * FROM products")
 res.json(rows)
 
 })
-
-// add product
 
 router.post("/",async(req,res)=>{
 
@@ -28,8 +24,6 @@ res.json({message:"product added"})
 
 })
 
-// delete product
-
 router.delete("/:id",async(req,res)=>{
 
 await db.query(
@@ -40,8 +34,6 @@ await db.query(
 res.json({message:"deleted"})
 
 })
-
-// stock in
 
 router.post("/stockin",async(req,res)=>{
 
@@ -61,8 +53,6 @@ res.json({message:"stock added"})
 
 })
 
-// stock out
-
 router.post("/stockout",async(req,res)=>{
 
 const {id,quantity}=req.body
@@ -80,8 +70,6 @@ await db.query(
 res.json({message:"stock removed"})
 
 })
-
-// history
 
 router.get("/history",async(req,res)=>{
 
