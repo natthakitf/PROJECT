@@ -1,72 +1,80 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="th">
 <head>
-
 <meta charset="UTF-8">
-<title>ระบบจัดการสินค้า</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ภาพรวมระบบสินค้า</title>
 <link rel="stylesheet" href="css/styles.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
-
 <body>
-
 <div class="layout">
+<aside class="sidebar">
+<div class="brand">
+<span class="brand-mark">IS</span>
+<div>
+<p class="brand-label">Inventory</p>
+<h1>ระบบสินค้า</h1>
+</div>
+</div>
 
-<div class="sidebar">
-
-<h2>📦 ระบบสินค้า</h2>
-
-<ul>
-<li class="active" onclick="window.location='index.html'">Dashboard</li>
+<nav>
+<ul class="nav-list">
+<li class="active" onclick="window.location='index.html'">ภาพรวม</li>
 <li onclick="window.location='products.html'">สินค้า</li>
-<li onclick="window.location='history.html'">ประวัติ Stock</li>
+<li onclick="window.location='history.html'">ประวัติสต็อก</li>
 <li onclick="window.location='report.html'">รายงาน</li>
 </ul>
+</nav>
 
+<div class="sidebar-foot">
+<p>จัดการสต็อกให้อ่านง่ายและเป็นระเบียบ</p>
+</div>
+</aside>
+
+<main class="main">
+<header class="page-header">
+<div>
+<p class="eyebrow">Dashboard</p>
+<h2>ภาพรวมสินค้า</h2>
+<p class="page-copy">ดูจำนวนสินค้า สินค้าใกล้หมด และการเคลื่อนไหวล่าสุดในหน้าเดียว</p>
 </div>
 
-<div class="main">
-
-<div class="topbar">
-
-<input id="search" placeholder="ค้นหาสินค้า..." onkeyup="searchProduct()">
-
-<div class="user">
-👤 <span id="usernameDisplay"></span>
-<button onclick="logout()">ออกจากระบบ</button>
+<div class="topbar-actions">
+<input id="search" class="search-input" placeholder="ค้นหาสินค้า..." onkeyup="searchProduct()">
+<div class="user-chip">
+<span>ผู้ใช้</span>
+<strong id="usernameDisplay"></strong>
+<button class="secondary-btn" onclick="logout()">ออกจากระบบ</button>
 </div>
-
 </div>
+</header>
 
-<div class="cards">
+<section class="cards">
+<article class="card">
+<p class="card-label">สินค้าทั้งหมด</p>
+<p id="totalProducts" class="card-value">0</p>
+</article>
+<article class="card card-accent">
+<p class="card-label">สินค้าใกล้หมด</p>
+<p id="lowStock" class="card-value">0</p>
+</article>
+</section>
 
-<div class="card blue">
-<h3>สินค้าทั้งหมด</h3>
-<p id="totalProducts">0</p>
-</div>
+<section id="lowStockAlert" class="alertBox"></section>
 
-<div class="card red">
-<h3>สินค้าใกล้หมด</h3>
-<p id="lowStock">0</p>
-</div>
-
-</div>
-
-<div id="lowStockAlert" class="alertBox"></div>
-
-<div class="chartBox">
+<section class="panel">
+<div class="panel-head">
+<div>
+<p class="eyebrow">Overview</p>
 <h3>กราฟจำนวนสินค้า</h3>
+</div>
+</div>
 <canvas id="productChart"></canvas>
-</div>
-
-</div>
-
+</section>
+</main>
 </div>
 
 <script src="js/index.js"></script>
-
 </body>
 </html>

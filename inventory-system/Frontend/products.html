@@ -1,75 +1,122 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="th">
 <head>
-
 <meta charset="UTF-8">
-<title>สินค้า</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>จัดการสินค้า</title>
 <link rel="stylesheet" href="css/styles.css">
-
 </head>
-
 <body>
-
 <div class="layout">
-
-<div class="sidebar">
-
-<h2>📦 ระบบสินค้า</h2>
-
-<ul>
-<li onclick="window.location='index.html'">Dashboard</li>
-<li class="active">สินค้า</li>
-<li onclick="window.location='history.html'">ประวัติ Stock</li>
-<li onclick="window.location='report.html'">รายงาน</li>
-</ul>
-
+<aside class="sidebar">
+<div class="brand">
+<span class="brand-mark">IS</span>
+<div>
+<p class="brand-label">Inventory</p>
+<h1>ระบบสินค้า</h1>
+</div>
 </div>
 
-<div class="main">
+<nav>
+<ul class="nav-list">
+<li onclick="window.location='index.html'">ภาพรวม</li>
+<li class="active">สินค้า</li>
+<li onclick="window.location='history.html'">ประวัติสต็อก</li>
+<li onclick="window.location='report.html'">รายงาน</li>
+</ul>
+</nav>
 
-<h2>สินค้า</h2>
+<div class="sidebar-foot">
+<p>เพิ่ม ปรับ และติดตามสต็อกได้อย่างรวดเร็วในหน้าเดียว</p>
+</div>
+</aside>
 
-<button onclick="openModal()">➕ เพิ่มสินค้า</button>
+<main class="main">
+<header class="page-header">
+<div>
+<p class="eyebrow">Products</p>
+<h2>รายการสินค้า</h2>
+<p class="page-copy">จัดการข้อมูลสินค้า ปรับจำนวนคงเหลือ และดูสินค้าที่ต้องจับตาได้จากตารางเดียว</p>
+</div>
+<button class="primary-btn" onclick="openModal()">เพิ่มสินค้า</button>
+</header>
 
+<section class="cards products-cards">
+<article class="card">
+<p class="card-label">สินค้าทั้งหมด</p>
+<p id="productsTotalCount" class="card-value">0</p>
+<p class="card-note">รายการทั้งหมดในคลัง</p>
+</article>
+<article class="card card-accent">
+<p class="card-label">สินค้าใกล้หมด</p>
+<p id="productsLowCount" class="card-value">0</p>
+<p class="card-note">ควรเติมสต็อกเร็วๆ นี้</p>
+</article>
+<article class="card">
+<p class="card-label">พร้อมใช้งาน</p>
+<p id="productsHealthyCount" class="card-value">0</p>
+<p class="card-note">สินค้าที่มีสต็อกมากกว่าขั้นต่ำ</p>
+</article>
+</section>
+
+<section class="content-grid">
+<section class="panel content-main">
+<div class="panel-head">
+<div>
+<p class="eyebrow">Catalog</p>
+<h3 class="panel-title">ตารางรายการสินค้า</h3>
+</div>
+<div class="mini-chip" id="productsLastUpdated">อัปเดตล่าสุด</div>
+</div>
 <table>
-
 <thead>
 <tr>
 <th>ID</th>
 <th>ชื่อสินค้า</th>
-<th>Stock</th>
+<th>คงเหลือ</th>
 <th>ขั้นต่ำ</th>
 <th>จัดการ</th>
 </tr>
 </thead>
-
 <tbody id="productTable"></tbody>
-
 </table>
+</section>
 
+<aside class="content-side">
+<section class="panel">
+<p class="eyebrow">Overview</p>
+<h3 class="panel-title">ภาพรวมสต็อก</h3>
+<div id="productsStatusList" class="insight-list">
+<p class="empty-text">ยังไม่มีข้อมูล</p>
 </div>
+</section>
 
+<section class="panel">
+<p class="eyebrow">Watchlist</p>
+<h3 class="panel-title">สินค้าใกล้หมด</h3>
+<div id="productsWatchList" class="recent-list">
+<p class="empty-text">ยังไม่มีข้อมูล</p>
+</div>
+</section>
+</aside>
+</section>
+</main>
 </div>
 
 <div id="productModal" class="modal">
-
 <div class="modalContent">
-
-<h3>เพิ่มสินค้า</h3>
-
+<p class="eyebrow">New Product</p>
+<h3>เพิ่มสินค้าใหม่</h3>
 <input id="name" placeholder="ชื่อสินค้า">
-<input id="stock" placeholder="จำนวน">
-<input id="min" placeholder="ขั้นต่ำแจ้งเตือน">
-
-<button onclick="addProduct()">บันทึก</button> <button onclick="closeModal()">ยกเลิก</button>
-
+<input id="stock" type="number" min="0" placeholder="จำนวนเริ่มต้น">
+<input id="min" type="number" min="0" placeholder="จำนวนขั้นต่ำแจ้งเตือน">
+<div class="modal-actions">
+<button class="primary-btn" onclick="addProduct()">บันทึก</button>
+<button class="secondary-btn" onclick="closeModal()">ยกเลิก</button>
 </div>
-
+</div>
 </div>
 
 <script src="js/index.js"></script>
-
 </body>
 </html>

@@ -1,48 +1,116 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="th">
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>รายงาน</title>
-
 <link rel="stylesheet" href="css/styles.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
-
 <body>
-
 <div class="layout">
+<aside class="sidebar">
+<div class="brand">
+<span class="brand-mark">IS</span>
+<div>
+<p class="brand-label">Inventory</p>
+<h1>ระบบสินค้า</h1>
+</div>
+</div>
 
-<div class="sidebar">
-
-<h2>📦 ระบบสินค้า</h2>
-
-<ul>
-<li onclick="window.location='index.html'">Dashboard</li>
+<nav>
+<ul class="nav-list">
+<li onclick="window.location='index.html'">ภาพรวม</li>
 <li onclick="window.location='products.html'">สินค้า</li>
-<li onclick="window.location='history.html'">ประวัติ Stock</li>
+<li onclick="window.location='history.html'">ประวัติสต็อก</li>
 <li class="active">รายงาน</li>
 </ul>
+</nav>
 
+<div class="sidebar-foot">
+<p>สรุปภาพรวมการเคลื่อนไหวสินค้าแบบกระชับ อ่านง่าย และดูแนวโน้มได้ทันที</p>
 </div>
+</aside>
 
-<div class="main">
+<main class="main">
+<header class="page-header">
+<div>
+<p class="eyebrow">Reports</p>
+<h2>รายงานสรุป</h2>
+<p class="page-copy">ดูภาพรวมการรับเข้า จ่ายออก และแนวโน้มการเคลื่อนไหวของสินค้าในช่วงเวลาที่ต้องการ</p>
+</div>
+<div class="action-group">
+<button id="dailyReportBtn" class="primary-btn" onclick="dailyReport()">รายงานรายวัน</button>
+<button id="monthlyReportBtn" class="secondary-btn" onclick="monthlyReport()">รายงานรายเดือน</button>
+</div>
+</header>
 
-<h2>รายงาน</h2>
+<section class="cards report-cards">
+<article class="card">
+<p class="card-label">จำนวนรายการ</p>
+<p id="reportTotalMoves" class="card-value">0</p>
+<p id="reportRangeLabel" class="card-note">วันนี้</p>
+</article>
+<article class="card card-accent">
+<p class="card-label">รับเข้าสินค้า</p>
+<p id="reportStockIn" class="card-value">0</p>
+<p class="card-note">รวมรายการที่บันทึกรับเข้า</p>
+</article>
+<article class="card">
+<p class="card-label">จ่ายออกสินค้า</p>
+<p id="reportStockOut" class="card-value">0</p>
+<p class="card-note">รวมรายการที่บันทึกจ่ายออก</p>
+</article>
+</section>
 
-<button onclick="dailyReport()">รายงานรายวัน</button> <button onclick="monthlyReport()">รายงานรายเดือน</button>
-
-<h3 id="report"></h3>
-
+<section class="report-grid">
+<section class="panel report-main">
+<div class="panel-head">
+<div>
+<p class="eyebrow">Summary</p>
+<h3 id="report" class="report-title">เลือกประเภทรายงานเพื่อดูสรุป</h3>
+</div>
+<div class="report-badge" id="reportBadge">วันนี้</div>
+</div>
 <canvas id="reportChart"></canvas>
+</section>
 
+<aside class="report-side">
+<section class="panel insight-panel">
+<p class="eyebrow">Insight</p>
+<h3 class="panel-title">สรุปที่น่าสนใจ</h3>
+<div class="insight-list">
+<div class="insight-item">
+<span class="insight-label">สินค้าที่เคลื่อนไหวล่าสุด</span>
+<strong id="reportLatestProduct">-</strong>
 </div>
+<div class="insight-item">
+<span class="insight-label">ประเภทล่าสุด</span>
+<strong id="reportLatestType">-</strong>
+</div>
+<div class="insight-item">
+<span class="insight-label">เวลาบันทึกล่าสุด</span>
+<strong id="reportLatestTime">-</strong>
+</div>
+</div>
+</section>
 
+<section class="panel recent-panel">
+<div class="panel-head">
+<div>
+<p class="eyebrow">Recent Activity</p>
+<h3 class="panel-title">รายการล่าสุด</h3>
+</div>
+</div>
+<div id="reportRecentList" class="recent-list">
+<p class="empty-text">ยังไม่มีข้อมูล</p>
+</div>
+</section>
+</aside>
+</section>
+</main>
 </div>
 
 <script src="js/index.js"></script>
-
 </body>
 </html>

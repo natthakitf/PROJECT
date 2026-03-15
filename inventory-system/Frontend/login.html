@@ -1,42 +1,43 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>เข้าสู่ระบบ Inventory</title>
-
 <link rel="stylesheet" href="css/login.css">
-
 </head>
-
 <body>
-
-<div class="login-container">
-
-<div class="login-card">
-
-<div class="login-image"></div>
+<main class="login-shell">
+<section class="login-card">
+<div class="login-visual">
+<p class="eyebrow">Inventory System</p>
+<h1>ระบบจัดการสินค้าคงคลัง</h1>
+<p class="visual-copy">ระบบช่วยติดตามสินค้า คงเหลือ และประวัติการเคลื่อนไหว</p>
+<div class="visual-panel">
+<span>Realtime stock</span>
+<span>Clear history</span>
+<span>Simple reports</span>
+</div>
+</div>
 
 <div class="login-form">
+<p class="eyebrow">Welcome back</p>
+<h2>เข้าสู่ระบบ</h2>
+<p class="subtitle">กรอกชื่อผู้ใช้และรหัสผ่านเพื่อเข้าใช้งานระบบสินค้า</p>
 
-<h2>📦 Inventory System</h2>
-<p class="subtitle">เข้าสู่ระบบจัดการสินค้า</p>
-
+<label for="username">ชื่อผู้ใช้</label>
 <input id="username" placeholder="Username">
 
+<label for="password">รหัสผ่าน</label>
 <input id="password" type="password" placeholder="Password">
 
 <button onclick="login()">เข้าสู่ระบบ</button>
 
 <p class="copyright">Inventory System © 2026</p>
-
 </div>
-
-</div>
-
-</div>
+</section>
+</main>
 
 <script src="js/login.js"></script>
-
 </body>
 </html>
