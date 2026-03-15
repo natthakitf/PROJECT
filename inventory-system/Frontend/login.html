@@ -1,116 +1,42 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="th">
 
 <head>
 <meta charset="UTF-8">
 <title>เข้าสู่ระบบ Inventory</title>
 
-<style>
-
-body{
-margin:0;
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-font-family:Arial;
-background:linear-gradient(135deg,#4facfe,#00f2fe);
-}
-
-.loginCard{
-display:flex;
-background:white;
-border-radius:12px;
-overflow:hidden;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
-width:800px;
-}
-
-.loginImage{
-width:50%;
-background:url("https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d") center/cover;
-}
-
-.loginForm{
-padding:40px;
-width:50%;
-}
-
-.loginForm input{
-width:100%;
-padding:10px;
-margin-bottom:15px;
-border-radius:6px;
-border:1px solid #ccc;
-}
-
-.loginForm button{
-width:100%;
-padding:10px;
-background:#2f80ed;
-border:none;
-color:white;
-border-radius:6px;
-cursor:pointer;
-}
-
-</style>
+<link rel="stylesheet" href="css/login.css">
 
 </head>
 
 <body>
 
-<div class="loginCard">
+<div class="login-container">
 
-<div class="loginImage"></div>
+<div class="login-card">
 
-<div class="loginForm">
+<div class="login-image"></div>
 
-<h2>เข้าสู่ระบบ Inventory</h2>
+<div class="login-form">
+
+<h2>📦 Inventory System</h2>
+<p class="subtitle">เข้าสู่ระบบจัดการสินค้า</p>
 
 <input id="username" placeholder="Username">
+
 <input id="password" type="password" placeholder="Password">
 
-<button onclick="login()">Login</button>
+<button onclick="login()">เข้าสู่ระบบ</button>
+
+<p class="copyright">Inventory System © 2026</p>
 
 </div>
 
 </div>
 
-<script>
+</div>
 
-async function login(){
-
-const username = document.getElementById("username").value
-const password = document.getElementById("password").value
-
-const res = await fetch("http://localhost:3000/auth/login",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({username,password})
-})
-
-const data = await res.json()
-
-if(res.status === 200){
-
-localStorage.setItem("token",data.token)
-localStorage.setItem("username",data.username)
-
-window.location.href="index.html"
-
-}else{
-
-alert("Username หรือ Password ไม่ถูกต้อง")
-
-}
-
-}
-
-</script>
+<script src="js/login.js"></script>
 
 </body>
 </html>
