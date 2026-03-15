@@ -1,4 +1,10 @@
+if(localStorage.getItem("login") !== "true"){
+window.location.href="login.html"
+}
+
 const API="http://localhost:3000/products"
+
+let chart
 
 async function load(){
 
@@ -44,6 +50,8 @@ table.innerHTML += `
 document.getElementById("totalProducts").innerText=data.length
 document.getElementById("lowStock").innerText=low
 document.getElementById("notifyCount").innerText=low
+
+drawChart(data)
 
 loadHistory()
 
@@ -135,6 +143,58 @@ table.innerHTML+=`
 
 }
 
+function searchProduct(){
+
+const input=document.getElementById("search").value.toLowerCase()
+
+const rows=document.querySelectorAll("#productTable tr")
+
+rows.forEach(row=>{
+
+const name=row.children[1].innerText.toLowerCase()
+
+if(name.includes(input)){
+
+row.style.display=""
+
+}else{
+
+row.style.display="none"
+
+}
+
+})
+
+}
+
+function drawChart(data){
+
+const names=data.map(p=>p.name)
+const stocks=data.map(p=>p.stock)
+
+const ctx=document.getElementById("productChart")
+
+if(chart){
+chart.destroy()
+}
+
+chart=new Chart(ctx,{
+
+type:"bar",
+
+data:{
+labels:names,
+datasets:[{
+label:"จำนวนสินค้า",
+data:stocks,
+backgroundColor:"#2f80ed"
+}]
+}
+
+})
+
+}
+
 async function dailyReport(){
 
 const res = await fetch(API + "/history")
@@ -169,17 +229,21 @@ const month = new Date().toISOString().slice(0,7)
 let total = 0
 
 data.forEach(h=>{
-
 if(h.created_at.slice(0,7) === month){
-
 total += Number(h.quantity)
-
 }
-
 })
 
 document.getElementById("report").innerText =
 "📈 รายงานเดือนนี้ : มีการเคลื่อนไหวสินค้า " + total + " ชิ้น"
+
+}
+
+function logout(){
+
+localStorage.removeItem("login")
+
+window.location.href="login.html"
 
 }
 
