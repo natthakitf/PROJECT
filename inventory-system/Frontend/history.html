@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+
+<meta charset="UTF-8">
+<title>ประวัติ Stock</title>
+
+<link rel="stylesheet" href="css/styles.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<div class="sidebar">
+
+<h2>📦 ระบบสินค้า</h2>
+
+<ul>
+<li onclick="window.location='index.html'">Dashboard</li>
+<li onclick="window.location='products.html'">สินค้า</li>
+<li class="active">ประวัติ Stock</li>
+<li onclick="window.location='report.html'">รายงาน</li>
+</ul>
+
+</div>
+
+<div class="main">
+
+<h2>ประวัติ Stock</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>สินค้า</th>
+<th>ประเภท</th>
+<th>จำนวน</th>
+<th>วันที่</th>
+</tr>
+</thead>
+
+<tbody id="historyTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script src="js/index.js"></script>
+
+</body>
+</html>

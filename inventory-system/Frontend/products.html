@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+
+<meta charset="UTF-8">
+<title>สินค้า</title>
+
+<link rel="stylesheet" href="css/styles.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<div class="sidebar">
+
+<h2>📦 ระบบสินค้า</h2>
+
+<ul>
+<li onclick="window.location='index.html'">Dashboard</li>
+<li class="active">สินค้า</li>
+<li onclick="window.location='history.html'">ประวัติ Stock</li>
+<li onclick="window.location='report.html'">รายงาน</li>
+</ul>
+
+</div>
+
+<div class="main">
+
+<h2>สินค้า</h2>
+
+<button onclick="openModal()">➕ เพิ่มสินค้า</button>
+
+<table>
+
+<thead>
+<tr>
+<th>ID</th>
+<th>ชื่อสินค้า</th>
+<th>Stock</th>
+<th>ขั้นต่ำ</th>
+<th>จัดการ</th>
+</tr>
+</thead>
+
+<tbody id="productTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<div id="productModal" class="modal">
+
+<div class="modalContent">
+
+<h3>เพิ่มสินค้า</h3>
+
+<input id="name" placeholder="ชื่อสินค้า">
+<input id="stock" placeholder="จำนวน">
+<input id="min" placeholder="ขั้นต่ำแจ้งเตือน">
+
+<button onclick="addProduct()">บันทึก</button> <button onclick="closeModal()">ยกเลิก</button>
+
+</div>
+
+</div>
+
+<script src="js/index.js"></script>
+
+</body>
+</html>

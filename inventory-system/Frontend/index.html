@@ -1,42 +1,50 @@
 <!DOCTYPE html>
-<html>
 
+<html>
 <head>
 
 <meta charset="UTF-8">
 <title>ระบบจัดการสินค้า</title>
 
 <link rel="stylesheet" href="css/styles.css">
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
 <body>
 
+<div class="layout">
+
+<div class="sidebar">
+
+<h2>📦 ระบบสินค้า</h2>
+
+<ul>
+<li class="active" onclick="window.location='index.html'">Dashboard</li>
+<li onclick="window.location='products.html'">สินค้า</li>
+<li onclick="window.location='history.html'">ประวัติ Stock</li>
+<li onclick="window.location='report.html'">รายงาน</li>
+</ul>
+
+</div>
+
+<div class="main">
+
 <div class="topbar">
 
-<h1>ระบบจัดการสินค้า</h1>
+<input id="search" placeholder="ค้นหาสินค้า..." onkeyup="searchProduct()">
 
-<div>
-
-<span id="usernameDisplay"></span>
-<button onclick="logout()">Logout</button>
-
-<div class="notification">
-🔔 <span id="notifyCount">0</span>
+<div class="user">
+👤 <span id="usernameDisplay"></span>
+<button onclick="logout()">ออกจากระบบ</button>
 </div>
 
 </div>
-
-</div>
-
-<div id="lowStockAlert" class="alertBox"></div>
 
 <div class="cards">
 
 <div class="card blue">
-<h3>จำนวนสินค้าทั้งหมด</h3>
+<h3>สินค้าทั้งหมด</h3>
 <p id="totalProducts">0</p>
 </div>
 
@@ -47,79 +55,18 @@
 
 </div>
 
-<h2>เพิ่มสินค้า</h2>
+<div id="lowStockAlert" class="alertBox"></div>
 
-<div class="addBox">
-
-<input id="name" placeholder="ชื่อสินค้า">
-<input id="stock" placeholder="จำนวน">
-<input id="min" placeholder="แจ้งเตือนขั้นต่ำ">
-
-<button onclick="addProduct()">เพิ่มสินค้า</button>
+<div class="chartBox">
+<h3>กราฟจำนวนสินค้า</h3>
+<canvas id="productChart"></canvas>
+</div>
 
 </div>
 
-<h2>จัดการ Stock</h2>
-
-<button onclick="stockIn()">นำเข้า Stock</button>
-<button onclick="stockOut()">นำออก Stock</button>
-
-<h2>ค้นหาสินค้า</h2>
-
-<input id="search" placeholder="ค้นหาชื่อสินค้า..." onkeyup="searchProduct()">
-
-<h2>รายการสินค้า</h2>
-
-<table>
-
-<thead>
-
-<tr>
-<th>ID</th>
-<th>ชื่อสินค้า</th>
-<th>Stock</th>
-<th>ขั้นต่ำ</th>
-<th>จัดการ</th>
-</tr>
-
-</thead>
-
-<tbody id="productTable"></tbody>
-
-</table>
-
-<h2>กราฟจำนวนสินค้า</h2>
-
-<canvas id="productChart" width="400" height="150"></canvas>
-
-<h2>ประวัติ Stock</h2>
-
-<table>
-
-<thead>
-
-<tr>
-<th>สินค้า</th>
-<th>ประเภท</th>
-<th>จำนวน</th>
-<th>วันที่</th>
-</tr>
-
-</thead>
-
-<tbody id="historyTable"></tbody>
-
-</table>
-
-<h2>รายงาน</h2>
-
-<button onclick="dailyReport()">รายงานรายวัน</button>
-<button onclick="monthlyReport()">รายงานรายเดือน</button>
-
-<h3 id="report"></h3>
+</div>
 
 <script src="js/index.js"></script>
 
 </body>
-
 </html>
