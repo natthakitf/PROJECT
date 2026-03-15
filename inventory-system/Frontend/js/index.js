@@ -126,6 +126,11 @@ const name = document.getElementById("name").value
 const stock = document.getElementById("stock").value
 const min = document.getElementById("min").value
 
+if(!name.trim() || stock === "" || min === ""){
+alert("กรุณากรอกข้อมูลสินค้าให้ครบ")
+return
+}
+
 await fetch(API,{
 method:"POST",
 headers:{
@@ -138,7 +143,32 @@ min_stock:min
 })
 })
 
+closeModal()
+document.getElementById("name").value = ""
+document.getElementById("stock").value = ""
+document.getElementById("min").value = ""
+
 load()
+
+}
+
+function openModal(){
+
+const modal = document.getElementById("productModal")
+
+if(modal){
+modal.style.display = "flex"
+}
+
+}
+
+function closeModal(){
+
+const modal = document.getElementById("productModal")
+
+if(modal){
+modal.style.display = "none"
+}
 
 }
 

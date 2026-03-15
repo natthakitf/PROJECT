@@ -177,6 +177,49 @@ border-radius:6px;
 cursor:pointer;
 }
 
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(15,23,42,0.45);
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+.modalContent{
+width:min(420px,100%);
+background:white;
+border-radius:16px;
+padding:24px;
+box-shadow:0 20px 50px rgba(0,0,0,0.2);
+}
+
+.modalContent h3{
+margin-top:0;
+margin-bottom:16px;
+}
+
+.modalContent input{
+display:block;
+width:100%;
+box-sizing:border-box;
+padding:12px;
+margin-bottom:12px;
+border:1px solid #dbe1ea;
+border-radius:10px;
+outline:none;
+}
+
+.modalContent input:focus{
+border-color:#3b82f6;
+box-shadow:0 0 0 3px rgba(59,130,246,0.15);
+}
+
+.modalContent button{
+margin-right:8px;
+}
+
 .delete{
 background:#ef4444;
 color:white;
