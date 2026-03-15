@@ -35,6 +35,7 @@ res.json({message:"deleted"})
 
 })
 
+
 router.post("/stockin",async(req,res)=>{
 
 const {id,quantity}=req.body

@@ -1,3 +1,11 @@
+const formatThaiDate = (dateString) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('th-TH', {
+        year: 'numeric', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+    }).format(date);
+};
+
 const username = localStorage.getItem("username")
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -90,6 +98,20 @@ load()
 
 }
 
+async function editProduct(id, oldName, oldMin) {
+    const name = prompt("แก้ไขชื่อสินค้า", oldName);
+    const min = prompt("แก้ไขขั้นต่ำการแจ้งเตือน", oldMin);
+
+    if (name && min) {
+        await fetch(API + "/" + id, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, min_stock: Number(min) })
+        });
+        load();
+    }
+}
+
 async function deleteProduct(id){
 
 await fetch(API+"/"+id,{
@@ -147,12 +169,12 @@ table.innerHTML=""
 
 data.forEach(h=>{
 
-table.innerHTML+=`
+table.innerHTML += `
 <tr>
-<td>${h.name}</td>
-<td>${h.type}</td>
-<td>${h.quantity}</td>
-<td>${h.created_at}</td>
+    <td>${h.name}</td>
+    <td>${h.type}</td>
+    <td>${h.quantity}</td>
+    <td>${formatThaiDate(h.created_at)}</td>
 </tr>
 `
 
