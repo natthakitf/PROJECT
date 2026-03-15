@@ -80,10 +80,6 @@ cursor:pointer;
 
 <script>
 
-if(localStorage.getItem("login") === "true"){
-window.location.href="index.html"
-}
-
 async function login(){
 
 const username = document.getElementById("username").value
@@ -94,15 +90,15 @@ method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
-body:JSON.stringify({
-username,
-password
+body:JSON.stringify({username,password})
 })
-})
+
+const data = await res.json()
 
 if(res.status === 200){
 
-localStorage.setItem("login","true")
+localStorage.setItem("token",data.token)
+localStorage.setItem("username",data.username)
 
 window.location.href="index.html"
 

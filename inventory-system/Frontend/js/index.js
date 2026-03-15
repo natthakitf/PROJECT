@@ -1,6 +1,18 @@
-if(localStorage.getItem("login") !== "true"){
+const username = localStorage.getItem("username")
+
+document.addEventListener("DOMContentLoaded", () => {
+
+if(!username){
 window.location.href="login.html"
+return
 }
+
+const nameDisplay = document.getElementById("usernameDisplay")
+if(nameDisplay){
+nameDisplay.innerText = username
+}
+
+})
 
 const API="http://localhost:3000/products"
 
@@ -8,10 +20,15 @@ let chart
 
 async function load(){
 
+const table=document.getElementById("productTable")
+
+if(table){
+table.innerHTML="<tr><td colspan='5'>Loading...</td></tr>"
+}
+
 const res=await fetch(API)
 const data=await res.json()
 
-const table=document.getElementById("productTable")
 const alertBox=document.getElementById("lowStockAlert")
 
 table.innerHTML=""
@@ -241,7 +258,8 @@ document.getElementById("report").innerText =
 
 function logout(){
 
-localStorage.removeItem("login")
+localStorage.removeItem("username")
+localStorage.removeItem("token")
 
 window.location.href="login.html"
 

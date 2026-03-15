@@ -50,6 +50,7 @@ border-radius:12px;
 color:white;
 width:220px;
 box-shadow:0 8px 20px rgba(0,0,0,0.1);
+animation:fadeUp 0.8s ease;
 }
 
 .card p{
@@ -109,4 +110,15 @@ border-bottom:1px solid #eee;
 
 tr:hover{
 background:#f2f6ff;
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
