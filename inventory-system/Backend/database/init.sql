@@ -2,27 +2,38 @@ CREATE DATABASE IF NOT EXISTS inventory;
 
 USE inventory;
 
-CREATE TABLE users(
+CREATE TABLE IF NOT EXISTS users(
 id INT AUTO_INCREMENT PRIMARY KEY,
-username VARCHAR(50),
-password VARCHAR(50),
-role VARCHAR(20)
-);
-
-INSERT INTO users(username,password,role)
-VALUES("admin","1234","admin");
-
-CREATE TABLE products(
-id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(100),
-stock INT,
-min_stock INT
-);
-
-CREATE TABLE stock_history(
-id INT AUTO_INCREMENT PRIMARY KEY,
-product_id INT,
-type VARCHAR(10),
-quantity INT,
+username VARCHAR(50) NOT NULL UNIQUE,
+password_hash VARCHAR(255) NOT NULL,
+role ENUM('admin','staff') NOT NULL DEFAULT 'staff',
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO users(username,password_hash,role)
+SELECT "admin","bd4e1189e442097d79c556973529772c:38d57a1869e46b623e2f689c6e6a2b8d787b74572cc8c160fb68503f1a91231f7e5f7173e15918e7d925f5f41802c442c8ac48c7eabc1176c013726399fb4b0b","admin"
+WHERE NOT EXISTS (
+  SELECT 1 FROM users WHERE username = "admin"
+);
+
+CREATE TABLE IF NOT EXISTS products(
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(100) NOT NULL,
+stock INT NOT NULL DEFAULT 0,
+min_stock INT NOT NULL DEFAULT 0,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+CHECK (stock >= 0),
+CHECK (min_stock >= 0)
+);
+
+CREATE TABLE IF NOT EXISTS stock_history(
+id INT AUTO_INCREMENT PRIMARY KEY,
+product_id INT NOT NULL,
+type ENUM('IN','OUT') NOT NULL,
+quantity INT NOT NULL,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+CONSTRAINT fk_stock_history_product
+FOREIGN KEY (product_id) REFERENCES products(id)
+ON DELETE CASCADE,
+CHECK (quantity > 0)
 );
