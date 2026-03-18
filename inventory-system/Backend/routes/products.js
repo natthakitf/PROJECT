@@ -153,7 +153,16 @@ res.status(500).json({ message:"Unable to decrease stock" })
 router.get("/history", async (req,res)=>{
 try{
 const [rows] = await db.query(`
-SELECT stock_history.id, stock_history.product_id, stock_history.type, stock_history.quantity, stock_history.created_at, products.name
+SELECT
+stock_history.id,
+stock_history.product_id,
+stock_history.type,
+stock_history.quantity,
+DATE_FORMAT(
+CONVERT_TZ(stock_history.created_at, '+00:00', '+07:00'),
+'%Y-%m-%d %H:%i:%s'
+) AS created_at,
+products.name
 FROM stock_history
 JOIN products ON products.id = stock_history.product_id
 ORDER BY created_at DESC
