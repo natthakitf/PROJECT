@@ -50,11 +50,13 @@
                     <p id="productsTotalCount" class="card-value">0</p>
                     <p class="card-note">จำนวนสินค้าทั้งหมดในคลัง</p>
                 </article>
+
                 <article class="card card-accent">
                     <p class="card-label">สินค้าใกล้หมด</p>
                     <p id="productsLowCount" class="card-value">0</p>
                     <p class="card-note">ควรเติมสต็อกเร็วๆ นี้</p>
                 </article>
+
                 <article class="card">
                     <p class="card-label">พร้อมใช้งาน</p>
                     <p id="productsHealthyCount" class="card-value">0</p>
@@ -71,6 +73,7 @@
                         </div>
                         <div class="mini-chip" id="productsLastUpdated">อัปเดตล่าสุด</div>
                     </div>
+
                     <table>
                         <thead>
                             <tr>
@@ -113,6 +116,7 @@
             <input id="name" placeholder="ชื่อสินค้า">
             <input id="stock" type="number" min="0" placeholder="จำนวนเริ่มต้น">
             <input id="min" type="number" min="0" placeholder="จำนวนขั้นต่ำแจ้งเตือน">
+
             <div class="modal-actions">
                 <button class="primary-btn" onclick="addProduct()">บันทึก</button>
                 <button class="secondary-btn" onclick="closeModal()">ยกเลิก</button>

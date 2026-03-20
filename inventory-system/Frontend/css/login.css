@@ -169,12 +169,12 @@ body {
         padding: 36px;
     }
 
-    .login-form {
-        padding: 36px 28px;
-    }
-
     .login-visual h1 {
         font-size: 36px;
+    }
+
+    .login-form {
+        padding: 36px 28px;
     }
 }
 
