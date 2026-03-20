@@ -5,6 +5,18 @@ document.addEventListener("DOMContentLoaded", () => {
   loadHistoryPage().catch(App.handleUnexpectedError)
 })
 
+function getTypeText(type) {
+  return type === "IN" ? "รับเข้า" : "จ่ายออก"
+}
+
+function setText(id, value) {
+  const element = document.getElementById(id)
+
+  if (element) {
+    element.innerText = value
+  }
+}
+
 async function loadHistoryPage() {
   const history = await fetchHistory()
   renderHistoryTable(history)
@@ -34,60 +46,29 @@ function renderHistoryTable(history) {
     return
   }
 
-  table.innerHTML = history.map((item) => {
-    const typeText = item.type === "IN" ? "รับเข้า" : "จ่ายออก"
-
-    return `
+  table.innerHTML = history.map((item) => `
 <tr>
 <td>${item.name}</td>
-<td>${typeText}</td>
+<td>${getTypeText(item.type)}</td>
 <td>${item.quantity}</td>
 <td>${App.formatThaiDate(item.created_at)}</td>
 </tr>
-`
-  }).join("")
+`).join("")
 }
 
 function renderHistoryDashboard(history) {
-  const totalCount = document.getElementById("historyTotalCount")
-  const inCount = document.getElementById("historyInCount")
-  const outCount = document.getElementById("historyOutCount")
-  const latestTime = document.getElementById("historyLatestTime")
-  const latestProduct = document.getElementById("historyLatestProduct")
-  const latestType = document.getElementById("historyLatestType")
-  const latestQuantity = document.getElementById("historyLatestQuantity")
-  const recentList = document.getElementById("historyRecentList")
   const latestItem = history[0]
+  const recentList = document.getElementById("historyRecentList")
+  const inItems = history.filter((item) => item.type === "IN")
+  const outItems = history.filter((item) => item.type === "OUT")
 
-  if (totalCount) {
-    totalCount.innerText = history.length
-  }
-
-  if (inCount) {
-    inCount.innerText = history.filter((item) => item.type === "IN").length
-  }
-
-  if (outCount) {
-    outCount.innerText = history.filter((item) => item.type === "OUT").length
-  }
-
-  if (latestTime) {
-    latestTime.innerText = latestItem ? App.formatThaiDate(latestItem.created_at) : "ไม่มีข้อมูล"
-  }
-
-  if (latestProduct) {
-    latestProduct.innerText = latestItem ? latestItem.name : "-"
-  }
-
-  if (latestType) {
-    latestType.innerText = latestItem
-      ? latestItem.type === "IN" ? "รับเข้า" : "จ่ายออก"
-      : "-"
-  }
-
-  if (latestQuantity) {
-    latestQuantity.innerText = latestItem ? `${latestItem.quantity} ชิ้น` : "-"
-  }
+  setText("historyTotalCount", history.length)
+  setText("historyInCount", inItems.length)
+  setText("historyOutCount", outItems.length)
+  setText("historyLatestTime", latestItem ? App.formatThaiDate(latestItem.created_at) : "ไม่มีข้อมูล")
+  setText("historyLatestProduct", latestItem ? latestItem.name : "-")
+  setText("historyLatestType", latestItem ? getTypeText(latestItem.type) : "-")
+  setText("historyLatestQuantity", latestItem ? `${latestItem.quantity} ชิ้น` : "-")
 
   if (!recentList) return
 

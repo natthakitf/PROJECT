@@ -7,6 +7,18 @@ document.addEventListener("DOMContentLoaded", () => {
   loadReportPage().catch(App.handleUnexpectedError)
 })
 
+function getTypeText(type) {
+  return type === "IN" ? "รับเข้า" : "จ่ายออก"
+}
+
+function setText(id, value) {
+  const element = document.getElementById(id)
+
+  if (element) {
+    element.innerText = value
+  }
+}
+
 async function loadReportPage() {
   const history = await App.apiRequest(`${App.PRODUCTS_API}/history`)
   renderRecentActivity(history)
@@ -21,8 +33,6 @@ function renderReport(history, mode) {
   const stockOut = document.getElementById("reportStockOut")
   const rangeLabel = document.getElementById("reportRangeLabel")
   const badge = document.getElementById("reportBadge")
-  const dailyButton = document.getElementById("dailyReportBtn")
-  const monthlyButton = document.getElementById("monthlyReportBtn")
 
   if (!reportText || !totalMoves || !stockIn || !stockOut || !rangeLabel || !badge) {
     return
@@ -44,7 +54,7 @@ function renderReport(history, mode) {
   rangeLabel.innerText = mode === "monthly" ? "ข้อมูลเดือนปัจจุบัน" : "ข้อมูลวันนี้"
   badge.innerText = mode === "monthly" ? "เดือนนี้" : "วันนี้"
 
-  updateReportButtons(mode, dailyButton, monthlyButton)
+  updateReportButtons(mode)
   renderReportChart(filteredHistory, mode, topProduct)
 }
 
@@ -64,7 +74,10 @@ function getReportHistory(history, mode) {
   })
 }
 
-function updateReportButtons(mode, dailyButton, monthlyButton) {
+function updateReportButtons(mode) {
+  const dailyButton = document.getElementById("dailyReportBtn")
+  const monthlyButton = document.getElementById("monthlyReportBtn")
+
   if (dailyButton) {
     dailyButton.className = mode === "daily" ? "primary-btn" : "secondary-btn"
   }
@@ -79,9 +92,9 @@ function renderReportChart(history, mode, topProduct) {
 
   if (!canvas) return
 
-  const groupedData = groupHistoryForChart(history, mode)
-  const labels = groupedData.labels.length ? groupedData.labels : ["ไม่มีข้อมูล"]
-  const values = groupedData.values.length ? groupedData.values : [0]
+  const { labels, values } = groupHistoryForChart(history, mode)
+  const chartLabels = labels.length ? labels : ["ไม่มีข้อมูล"]
+  const chartValues = values.length ? values : [0]
 
   if (reportChart) {
     reportChart.destroy()
@@ -90,13 +103,11 @@ function renderReportChart(history, mode, topProduct) {
   reportChart = new Chart(canvas, {
     type: "line",
     data: {
-      labels,
+      labels: chartLabels,
       datasets: [
         {
-          label: topProduct
-            ? `แนวโน้มการเคลื่อนไหว (${topProduct})`
-            : "แนวโน้มการเคลื่อนไหว",
-          data: values,
+          label: topProduct ? `แนวโน้มการเคลื่อนไหว (${topProduct})` : "แนวโน้มการเคลื่อนไหว",
+          data: chartValues,
           borderColor: "#111827",
           backgroundColor: "rgba(17,24,39,0.08)",
           fill: true,
@@ -163,24 +174,11 @@ function renderRecentActivity(history) {
 }
 
 function renderLatestInsight(history) {
-  const latestProduct = document.getElementById("reportLatestProduct")
-  const latestType = document.getElementById("reportLatestType")
-  const latestTime = document.getElementById("reportLatestTime")
   const latestItem = history[0]
 
-  if (latestProduct) {
-    latestProduct.innerText = latestItem ? latestItem.name : "-"
-  }
-
-  if (latestType) {
-    latestType.innerText = latestItem
-      ? latestItem.type === "IN" ? "รับเข้า" : "จ่ายออก"
-      : "-"
-  }
-
-  if (latestTime) {
-    latestTime.innerText = latestItem ? App.formatThaiDate(latestItem.created_at) : "-"
-  }
+  setText("reportLatestProduct", latestItem ? latestItem.name : "-")
+  setText("reportLatestType", latestItem ? getTypeText(latestItem.type) : "-")
+  setText("reportLatestTime", latestItem ? App.formatThaiDate(latestItem.created_at) : "-")
 }
 
 async function dailyReport() {

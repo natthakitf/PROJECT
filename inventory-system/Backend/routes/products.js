@@ -17,6 +17,10 @@ function parsePositiveNumber(value) {
   return Number.isNaN(parsedValue) || parsedValue <= 0 ? null : parsedValue
 }
 
+function sendError(res, status, message) {
+  return res.status(status).json({ message })
+}
+
 async function findProductById(productId, includeStock = false) {
   const query = includeStock
     ? "SELECT id, stock FROM products WHERE id=? LIMIT 1"
@@ -24,6 +28,13 @@ async function findProductById(productId, includeStock = false) {
 
   const [rows] = await db.query(query, [productId])
   return rows[0] || null
+}
+
+async function addStockHistory(productId, type, quantity) {
+  await db.query(
+    "INSERT INTO stock_history(product_id,type,quantity) VALUES(?,?,?)",
+    [productId, type, quantity]
+  )
 }
 
 router.get("/", async (req, res) => {
@@ -35,7 +46,7 @@ router.get("/", async (req, res) => {
     res.status(200).json(rows)
   } catch (err) {
     console.error("Get products error:", err)
-    res.status(500).json({ message: "Unable to fetch products" })
+    sendError(res, 500, "Unable to fetch products")
   }
 })
 
@@ -46,11 +57,11 @@ router.post("/", async (req, res) => {
   const parsedMinStock = Number(minStock)
 
   if (!productName || Number.isNaN(parsedStock) || Number.isNaN(parsedMinStock)) {
-    return res.status(400).json({ message: "Name, stock and min stock are required" })
+    return sendError(res, 400, "Name, stock and min stock are required")
   }
 
   if (parsedStock < 0 || parsedMinStock < 0) {
-    return res.status(400).json({ message: "Stock values must be zero or greater" })
+    return sendError(res, 400, "Stock values must be zero or greater")
   }
 
   try {
@@ -65,7 +76,7 @@ router.post("/", async (req, res) => {
     })
   } catch (err) {
     console.error("Create product error:", err)
-    res.status(500).json({ message: "Unable to create product" })
+    sendError(res, 500, "Unable to create product")
   }
 })
 
@@ -73,20 +84,20 @@ router.delete("/:id", async (req, res) => {
   const productId = parseId(req.params.id)
 
   if (!productId) {
-    return res.status(400).json({ message: "Invalid product id" })
+    return sendError(res, 400, "Invalid product id")
   }
 
   try {
     const [result] = await db.query("DELETE FROM products WHERE id=?", [productId])
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Product not found" })
+      return sendError(res, 404, "Product not found")
     }
 
     res.status(200).json({ message: "Product deleted" })
   } catch (err) {
     console.error("Delete product error:", err)
-    res.status(500).json({ message: "Unable to delete product" })
+    sendError(res, 500, "Unable to delete product")
   }
 })
 
@@ -95,26 +106,23 @@ router.post("/stockin", async (req, res) => {
   const quantity = parsePositiveNumber(req.body.quantity)
 
   if (!productId || !quantity) {
-    return res.status(400).json({ message: "Valid product id and positive quantity are required" })
+    return sendError(res, 400, "Valid product id and positive quantity are required")
   }
 
   try {
     const product = await findProductById(productId)
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found" })
+      return sendError(res, 404, "Product not found")
     }
 
     await db.query("UPDATE products SET stock=stock+? WHERE id=?", [quantity, productId])
-    await db.query(
-      "INSERT INTO stock_history(product_id,type,quantity) VALUES(?,?,?)",
-      [productId, "IN", quantity]
-    )
+    await addStockHistory(productId, "IN", quantity)
 
     res.status(200).json({ message: "Stock added" })
   } catch (err) {
     console.error("Stock in error:", err)
-    res.status(500).json({ message: "Unable to increase stock" })
+    sendError(res, 500, "Unable to increase stock")
   }
 })
 
@@ -123,30 +131,27 @@ router.post("/stockout", async (req, res) => {
   const quantity = parsePositiveNumber(req.body.quantity)
 
   if (!productId || !quantity) {
-    return res.status(400).json({ message: "Valid product id and positive quantity are required" })
+    return sendError(res, 400, "Valid product id and positive quantity are required")
   }
 
   try {
     const product = await findProductById(productId, true)
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found" })
+      return sendError(res, 404, "Product not found")
     }
 
     if (product.stock < quantity) {
-      return res.status(400).json({ message: "Insufficient stock" })
+      return sendError(res, 400, "Insufficient stock")
     }
 
     await db.query("UPDATE products SET stock=stock-? WHERE id=?", [quantity, productId])
-    await db.query(
-      "INSERT INTO stock_history(product_id,type,quantity) VALUES(?,?,?)",
-      [productId, "OUT", quantity]
-    )
+    await addStockHistory(productId, "OUT", quantity)
 
     res.status(200).json({ message: "Stock removed" })
   } catch (err) {
     console.error("Stock out error:", err)
-    res.status(500).json({ message: "Unable to decrease stock" })
+    sendError(res, 500, "Unable to decrease stock")
   }
 })
 
@@ -171,7 +176,7 @@ router.get("/history", async (req, res) => {
     res.status(200).json(rows)
   } catch (err) {
     console.error("Get history error:", err)
-    res.status(500).json({ message: "Unable to fetch stock history" })
+    sendError(res, 500, "Unable to fetch stock history")
   }
 })
 
