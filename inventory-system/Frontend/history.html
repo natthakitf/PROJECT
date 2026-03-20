@@ -1,118 +1,121 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ประวัติสต็อก</title>
-<link rel="stylesheet" href="css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ประวัติสต็อก</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
-<div class="layout">
-<aside class="sidebar">
-<div class="brand">
-<span class="brand-mark">IS</span>
-<div>
-<p class="brand-label">Inventory</p>
-<h1>ระบบสินค้า</h1>
-</div>
-</div>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="brand-mark">IS</span>
+                <div>
+                    <p class="brand-label">Inventory</p>
+                    <h1>ระบบสินค้า</h1>
+                </div>
+            </div>
 
-<nav>
-<ul class="nav-list">
-<li onclick="window.location='index.html'">ภาพรวม</li>
-<li onclick="window.location='products.html'">สินค้า</li>
-<li class="active">ประวัติสต็อก</li>
-<li onclick="window.location='report.html'">รายงาน</li>
-</ul>
-</nav>
+            <nav>
+                <ul class="nav-list">
+                    <li onclick="window.location='index.html'">ภาพรวม</li>
+                    <li onclick="window.location='products.html'">สินค้า</li>
+                    <li class="active">ประวัติสต็อก</li>
+                    <li onclick="window.location='report.html'">รายงาน</li>
+                </ul>
+            </nav>
 
-<div class="sidebar-foot">
-<p>ตรวจสอบความเคลื่อนไหวของสต็อกย้อนหลังได้ตลอดเวลา</p>
-</div>
-</aside>
+            <div class="sidebar-foot">
+                <p>ตรวจสอบความเคลื่อนไหวของสต็อกย้อนหลังได้ตลอดเวลา</p>
+            </div>
+        </aside>
 
-<main class="main">
-<header class="page-header">
-<div>
-<p class="eyebrow">History</p>
-<h2>ประวัติการเคลื่อนไหวสต็อก</h2>
-<p class="page-copy">ดูรายการรับเข้าและจ่ายออก พร้อมเวลาและข้อมูลล่าสุดของการเคลื่อนไหวสินค้า</p>
-</div>
-</header>
+        <main class="main">
+            <header class="page-header">
+                <div>
+                    <p class="eyebrow">History</p>
+                    <h2>ประวัติการเคลื่อนไหวสต็อก</h2>
+                    <p class="page-copy">ดูรายการรับเข้าและจ่ายออก พร้อมเวลาและข้อมูลล่าสุดของการเคลื่อนไหวสินค้า</p>
+                </div>
+            </header>
 
-<section class="cards history-cards">
-<article class="card">
-<p class="card-label">รายการทั้งหมด</p>
-<p id="historyTotalCount" class="card-value">0</p>
-<p class="card-note">รายการที่บันทึกไว้ในระบบ</p>
-</article>
-<article class="card card-accent">
-<p class="card-label">รับเข้า</p>
-<p id="historyInCount" class="card-value">0</p>
-<p class="card-note">จำนวนรายการรับเข้า</p>
-</article>
-<article class="card">
-<p class="card-label">จ่ายออก</p>
-<p id="historyOutCount" class="card-value">0</p>
-<p class="card-note">จำนวนรายการจ่ายออก</p>
-</article>
-</section>
+            <section class="cards history-cards">
+                <article class="card">
+                    <p class="card-label">รายการทั้งหมด</p>
+                    <p id="historyTotalCount" class="card-value">0</p>
+                    <p class="card-note">รายการที่บันทึกไว้ในระบบ</p>
+                </article>
+                <article class="card card-accent">
+                    <p class="card-label">รับเข้า</p>
+                    <p id="historyInCount" class="card-value">0</p>
+                    <p class="card-note">จำนวนรายการรับเข้า</p>
+                </article>
+                <article class="card">
+                    <p class="card-label">จ่ายออก</p>
+                    <p id="historyOutCount" class="card-value">0</p>
+                    <p class="card-note">จำนวนรายการจ่ายออก</p>
+                </article>
+            </section>
 
-<section class="content-grid">
-<section class="panel content-main">
-<div class="panel-head">
-<div>
-<p class="eyebrow">Activity Log</p>
-<h3 class="panel-title">รายการเคลื่อนไหว</h3>
-</div>
-<div class="mini-chip" id="historyLatestTime">อัปเดตล่าสุด</div>
-</div>
-<table>
-<thead>
-<tr>
-<th>สินค้า</th>
-<th>ประเภท</th>
-<th>จำนวน</th>
-<th>วันที่</th>
-</tr>
-</thead>
-<tbody id="historyTable"></tbody>
-</table>
-</section>
+            <section class="content-grid">
+                <section class="panel content-main">
+                    <div class="panel-head">
+                        <div>
+                            <p class="eyebrow">Activity Log</p>
+                            <h3 class="panel-title">รายการเคลื่อนไหว</h3>
+                        </div>
+                        <div class="mini-chip" id="historyLatestTime">อัปเดตล่าสุด</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>สินค้า</th>
+                                <th>ประเภท</th>
+                                <th>จำนวน</th>
+                                <th>วันที่</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTable"></tbody>
+                    </table>
+                </section>
 
-<aside class="content-side">
-<section class="panel">
-<p class="eyebrow">Latest</p>
-<h3 class="panel-title">ข้อมูลล่าสุด</h3>
-<div class="insight-list">
-<div class="insight-item">
-<span class="insight-label">สินค้าล่าสุด</span>
-<strong id="historyLatestProduct">-</strong>
-</div>
-<div class="insight-item">
-<span class="insight-label">ประเภทล่าสุด</span>
-<strong id="historyLatestType">-</strong>
-</div>
-<div class="insight-item">
-<span class="insight-label">จำนวนล่าสุด</span>
-<strong id="historyLatestQuantity">-</strong>
-</div>
-</div>
-</section>
+                <aside class="content-side">
+                    <section class="panel">
+                        <p class="eyebrow">Latest</p>
+                        <h3 class="panel-title">ข้อมูลล่าสุด</h3>
+                        <div class="insight-list">
+                            <div class="insight-item">
+                                <span class="insight-label">สินค้าล่าสุด</span>
+                                <strong id="historyLatestProduct">-</strong>
+                            </div>
+                            <div class="insight-item">
+                                <span class="insight-label">ประเภทล่าสุด</span>
+                                <strong id="historyLatestType">-</strong>
+                            </div>
+                            <div class="insight-item">
+                                <span class="insight-label">จำนวนล่าสุด</span>
+                                <strong id="historyLatestQuantity">-</strong>
+                            </div>
+                        </div>
+                    </section>
 
-<section class="panel">
-<p class="eyebrow">Recent</p>
-<h3 class="panel-title">3 รายการล่าสุด</h3>
-<div id="historyRecentList" class="recent-list">
-<p class="empty-text">ยังไม่มีข้อมูล</p>
-</div>
-</section>
-</aside>
-</section>
-</main>
-</div>
+                    <section class="panel">
+                        <p class="eyebrow">Recent</p>
+                        <h3 class="panel-title">3 รายการล่าสุด</h3>
+                        <div id="historyRecentList" class="recent-list">
+                            <p class="empty-text">ยังไม่มีข้อมูล</p>
+                        </div>
+                    </section>
+                </aside>
+            </section>
+        </main>
+    </div>
 
-<script src="js/app.js"></script>
-<script src="js/history.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/history.js"></script>
 </body>
+
 </html>

@@ -18,8 +18,8 @@ function applyDashboardFilter(keyword) {
   const normalizedKeyword = keyword.trim().toLowerCase()
   const filteredProducts = normalizedKeyword
     ? dashboardProducts.filter((product) => {
-        return product.name.toLowerCase().includes(normalizedKeyword)
-      })
+      return product.name.toLowerCase().includes(normalizedKeyword)
+    })
     : dashboardProducts
 
   renderDashboardSummary(filteredProducts, normalizedKeyword)
@@ -49,8 +49,8 @@ function renderDashboardSummary(products, keyword = "") {
 
   lowStockAlert.innerHTML = lowProducts.length
     ? lowProducts.map((product) => {
-        return `<div class="alertItem">สินค้า ${product.name} ใกล้หมด</div>`
-      }).join("")
+      return `<div class="alertItem">สินค้า ${product.name} ใกล้หมด</div>`
+    }).join("")
     : "<div class='alertItem'>ไม่พบสินค้าใกล้หมดตามคำค้น</div>"
 }
 
