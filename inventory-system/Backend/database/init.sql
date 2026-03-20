@@ -10,10 +10,13 @@ role ENUM('admin','staff') NOT NULL DEFAULT 'staff',
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO users(username,password_hash,role)
-SELECT "admin","bd4e1189e442097d79c556973529772c:38d57a1869e46b623e2f689c6e6a2b8d787b74572cc8c160fb68503f1a91231f7e5f7173e15918e7d925f5f41802c442c8ac48c7eabc1176c013726399fb4b0b","admin"
+INSERT INTO users(username, password_hash, role)
+SELECT
+"admin",
+"bd4e1189e442097d79c556973529772c:38d57a1869e46b623e2f689c6e6a2b8d787b74572cc8c160fb68503f1a91231f7e5f7173e15918e7d925f5f41802c442c8ac48c7eabc1176c013726399fb4b0b",
+"admin"
 WHERE NOT EXISTS (
-  SELECT 1 FROM users WHERE username = "admin"
+SELECT 1 FROM users WHERE username = "admin"
 );
 
 CREATE TABLE IF NOT EXISTS products(

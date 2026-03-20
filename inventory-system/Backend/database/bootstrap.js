@@ -5,7 +5,8 @@ const defaultAdminHash = "bd4e1189e442097d79c556973529772c:38d57a1869e46b623e2f6
 
 async function bootstrapDatabase(){
 await createTables()
-await ensureUserColumns()
+await ensureUsersTable()
+await ensureProductsTable()
 await ensureConstraints()
 await ensureAdminUser()
 }
@@ -42,26 +43,30 @@ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 `)
 }
 
-async function ensureUserColumns(){
-const [userColumns] = await db.query("SHOW COLUMNS FROM users")
-const hasPasswordHash = userColumns.some((column)=>column.Field === "password_hash")
-const hasPassword = userColumns.some((column)=>column.Field === "password")
-const hasCreatedAt = userColumns.some((column)=>column.Field === "created_at")
+async function ensureUsersTable(){
+const [columns] = await db.query("SHOW COLUMNS FROM users")
+const columnNames = columns.map((column)=>column.Field)
 
-if(!hasPasswordHash){
+if(!columnNames.includes("password_hash")){
 await db.query("ALTER TABLE users ADD COLUMN password_hash VARCHAR(255) NULL")
 }
 
-if(!hasCreatedAt){
+if(!columnNames.includes("created_at")){
 await db.query("ALTER TABLE users ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 }
 
-if(hasPassword){
+if(columnNames.includes("password")){
+await movePasswordToHash()
+}
+}
+
+async function movePasswordToHash(){
 const [users] = await db.query("SELECT id, password, password_hash FROM users")
 
 for(const user of users){
-if(user.password_hash) continue
-if(!user.password) continue
+if(user.password_hash || !user.password){
+continue
+}
 
 await db.query(
 "UPDATE users SET password_hash=? WHERE id=?",
@@ -70,40 +75,52 @@ await db.query(
 }
 }
 
-const [productsColumns] = await db.query("SHOW COLUMNS FROM products")
-const hasProductCreatedAt = productsColumns.some((column)=>column.Field === "created_at")
+async function ensureProductsTable(){
+const [columns] = await db.query("SHOW COLUMNS FROM products")
+const columnNames = columns.map((column)=>column.Field)
 
-if(!hasProductCreatedAt){
+if(!columnNames.includes("created_at")){
 await db.query("ALTER TABLE products ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 }
 }
 
 async function ensureAdminUser(){
-const [existingUsers] = await db.query(
+const [rows] = await db.query(
 "SELECT id FROM users WHERE username=? LIMIT 1",
 ["admin"]
 )
 
-if(existingUsers.length === 0){
+if(rows.length > 0){
+return
+}
+
 await db.query(
 "INSERT INTO users(username,password_hash,role) VALUES(?,?,?)",
 ["admin", defaultAdminHash, "admin"]
 )
 }
-}
 
 async function ensureConstraints(){
-const [usernameIndexes] = await db.query("SHOW INDEX FROM users WHERE Key_name='uniq_users_username'")
+await ensureUsernameIsUnique()
+await ensureStockHistoryForeignKey()
+}
 
-if(usernameIndexes.length === 0){
+async function ensureUsernameIsUnique(){
+const [rows] = await db.query("SHOW INDEX FROM users WHERE Key_name='uniq_users_username'")
+
+if(rows.length > 0){
+return
+}
+
 try{
 await db.query("ALTER TABLE users ADD CONSTRAINT uniq_users_username UNIQUE (username)")
-}catch(err){
-console.warn("Skipping unique username constraint:",err.message)
+}catch(error){
+console.warn("Skipping unique username constraint:", error.message)
 }
 }
 
-const [fkRows] = await db.query(`
+async function ensureStockHistoryForeignKey(){
+const [rows] = await db.query(`
 SELECT CONSTRAINT_NAME
 FROM information_schema.TABLE_CONSTRAINTS
 WHERE TABLE_SCHEMA = DATABASE()
@@ -111,7 +128,10 @@ AND TABLE_NAME = 'stock_history'
 AND CONSTRAINT_TYPE = 'FOREIGN KEY'
 `)
 
-if(fkRows.length === 0){
+if(rows.length > 0){
+return
+}
+
 try{
 await db.query(`
 ALTER TABLE stock_history
@@ -119,9 +139,8 @@ ADD CONSTRAINT fk_stock_history_product
 FOREIGN KEY (product_id) REFERENCES products(id)
 ON DELETE CASCADE
 `)
-}catch(err){
-console.warn("Skipping stock_history foreign key:",err.message)
-}
+}catch(error){
+console.warn("Skipping stock_history foreign key:", error.message)
 }
 }
 
